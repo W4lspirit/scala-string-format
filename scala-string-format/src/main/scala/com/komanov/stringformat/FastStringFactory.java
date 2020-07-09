@@ -18,12 +18,12 @@ public class FastStringFactory {
         return fastNewString(getValue(sb));
     }
 
-    public static char[] getValue(StringBuilder sb) throws Throwable {
-        return (char[]) stringBuilderValueGetter.invoke(sb);
+    public static byte[] getValue(StringBuilder sb) throws Throwable {
+        return (byte[]) stringBuilderValueGetter.invoke(sb);
     }
 
-    public static String fastNewString(char[] chars) throws Throwable {
-        return (String) newString.invokeExact(chars, true);
+    public static String fastNewString(byte[] bytes) throws Throwable {
+        return (String) newString.invokeExact(bytes);
     }
 
     private static MethodHandle getValueHandler() {
@@ -44,7 +44,7 @@ public class FastStringFactory {
 
     private static MethodHandle getNewStringHandler() {
         try {
-            Constructor<String> constructor = String.class.getDeclaredConstructor(char[].class, boolean.class);
+            Constructor<String> constructor = String.class.getDeclaredConstructor(byte[].class);
             constructor.setAccessible(true);
             return MethodHandles.lookup().unreflectConstructor(constructor);
         }

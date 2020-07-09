@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.komanov</groupId>
@@ -15,12 +16,86 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jmh.version>1.16</jmh.version>
+        <jmh.version>1.23</jmh.version>
         <jmh.generator>default</jmh.generator>
-        <javac.target>1.8</javac.target>
         <uberjar.name>benchmarks</uberjar.name>
-    </properties>
+        <!--Java version-->
+        <maven-compiler-plugin.release>13</maven-compiler-plugin.release>
 
+        <maven-dependency-plugin.version>2.8</maven-dependency-plugin.version>
+        <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+
+        <scala-maven-plugin.version>4.4.0</scala-maven-plugin.version>
+        <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
+        <scala-maven-plugin.scalaVersion>2.13.3</scala-maven-plugin.scalaVersion>
+        <!-- https://mvnrepository.com/artifact/org.specs2/specs2-core -->
+        <specs2-version>4.10.0</specs2-version>
+ 
+
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-library</artifactId>
+                <version>2.13.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-reflect</artifactId>
+                <version>2.13.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>2.0.0-alpha1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-core</artifactId>
+                <version>${jmh.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-generator-annprocess</artifactId>
+                <version>${jmh.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <!-- test -->
+
+            <dependency>
+                <groupId>org.specs2</groupId>
+                <artifactId>specs2-core_2.13</artifactId>
+                <version>${specs2-version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.specs2</groupId>
+                <artifactId>specs2-matcher-extra_2.13</artifactId>
+                <version>${specs2-version}</version>
+                <scope>test</scope>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.specs2</groupId>
+                <artifactId>specs2-mock_2.13</artifactId>
+                <version>${specs2-version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.specs2</groupId>
+                <artifactId>specs2-junit_2.13</artifactId>
+                <version>${specs2-version}</version>
+                <scope>test</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
     <repositories>
         <repository>
             <id>scala-tools.org</id>
@@ -43,12 +118,10 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.5.1</version>
+                    <version>${maven-compiler-plugin.version}</version>
                     <configuration>
-                        <compilerVersion>${javac.target}</compilerVersion>
-                        <source>${javac.target}</source>
-                        <target>${javac.target}</target>
-                        <compilerArgument>-unchecked</compilerArgument>
+                        <release>${maven-compiler-plugin.release}</release>
+                        <!--<compilerArgument>-unchecked</compilerArgument>-->
                         <compilerArgument>-deprecation</compilerArgument>
                         <compilerArgument>-proc:none</compilerArgument>
                     </configuration>
@@ -56,7 +129,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.19.1</version>
+                    <version>${maven-surefire-plugin.version}</version>
                     <configuration>
                         <testSourceDirectory>${project.basedir}/src/test/scala</testSourceDirectory>
                     </configuration>
@@ -73,18 +146,17 @@
                 <plugin>
                     <groupId>net.alchim31.maven</groupId>
                     <artifactId>scala-maven-plugin</artifactId>
-                    <version>3.2.2</version>
+                    <version>${scala-maven-plugin.version}</version>
                     <configuration>
+                        <scalaVersion>${scala-maven-plugin.scalaVersion}</scalaVersion>
                         <testSourceDir>${project.basedir}/src/test/scala</testSourceDir>
                         <args>
                             <arg>-deprecation</arg>
                             <arg>-feature</arg>
-                            <arg>-Xmax-classfile-name</arg>
+                            <!--<arg>-Xmax-classfile-name</arg>-->
                             <arg>240</arg>
                         </args>
                         <addJavacArgs>-deprecation</addJavacArgs>
-                        <source>${javac.target}</source>
-                        <target>${javac.target}</target>
                     </configuration>
                     <executions>
                         <execution>
@@ -126,7 +198,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>${maven-jar-plugin.version}</version>
                     <configuration>
                         <archive>
                             <manifest>
@@ -143,6 +215,103 @@
                         </archive>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <executions>
+                        <execution>
+                            <id>add-source</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>add-source</goal>
+                            </goals>
+                            <configuration>
+                                <sources>
+                                    <source>${project.basedir}/src/main/scala</source>
+                                    <source>${project.basedir}/target/generated-sources/jmh</source>
+                                </sources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <executions>
+                        <execution>
+                            <phase>process-sources</phase>
+                            <goals>
+                                <goal>java</goal>
+                            </goals>
+                            <configuration>
+                                <includePluginDependencies>true</includePluginDependencies>
+                                <mainClass>org.openjdk.jmh.generators.bytecode.JmhBytecodeGenerator</mainClass>
+                                <arguments>
+                                    <argument>${project.basedir}/target/classes/</argument>
+                                    <argument>${project.basedir}/target/generated-sources/jmh/</argument>
+                                    <argument>${project.basedir}/target/classes/</argument>
+                                    <argument>${jmh.generator}</argument>
+                                </arguments>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.openjdk.jmh</groupId>
+                            <artifactId>jmh-generator-bytecode</artifactId>
+                            <version>${jmh.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.2.4</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                            <configuration>
+                                <finalName>${uberjar.name}</finalName>
+                                <transformers>
+                                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                        <mainClass>org.openjdk.jmh.Main</mainClass>
+                                    </transformer>
+                                </transformers>
+                                <filters>
+                                    <filter>
+                                        <!--
+                                            Shading signed JARs will fail without this.
+                                            http://stackoverflow.com/questions/999489/invalid-signature-file-when-attempting-to-run-a-jar
+                                        -->
+                                        <artifact>*:*</artifact>
+                                        <excludes>
+                                            <exclude>META-INF/*.SF</exclude>
+                                            <exclude>META-INF/*.DSA</exclude>
+                                            <exclude>META-INF/*.RSA</exclude>
+                                        </excludes>
+                                    </filter>
+                                </filters>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.3</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.2.1</version>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -150,12 +319,12 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>1.3</version>
+                <version>${buildnumber-maven-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.8</version>
+                <version>${maven-dependency-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

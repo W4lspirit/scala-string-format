@@ -3,6 +3,23 @@ package com.komanov.stringformat
 import org.specs2.mutable.SpecificationWithJUnit
 
 class OptimizedConcatenation2Test extends SpecificationWithJUnit {
+/*
+
+  val o1: Object = Int.box(10000)
+  val o2: Object = Int.box(200000)
+  val o3: Object = Int.box(3000000)
+  val o4: Object = Int.box(40000000)
+  val o5: Object = Int.box(500000000)
+  val o6: Object = Int.box(60000000)
+  val o7: Object = Int.box(7000000)
+
+  val s1 = "10000"
+  val s2 = "200000"
+  val s3 = "3000000"
+  val s4 = "40000000"
+  val s5 = "500000000"
+  val s6 = "60000000"
+  val s7 = "7000000"
 
   "concat" should {
     "objects" >> {
@@ -28,21 +45,6 @@ class OptimizedConcatenation2Test extends SpecificationWithJUnit {
       OptimizedConcatenation2.concat(null, "1") must be_===("null1")
     }
   }
-
-  val o1: Object = Int.box(10000)
-  val o2: Object = Int.box(200000)
-  val o3: Object = Int.box(3000000)
-  val o4: Object = Int.box(40000000)
-  val o5: Object = Int.box(500000000)
-  val o6: Object = Int.box(60000000)
-  val o7: Object = Int.box(7000000)
-
-  val s1 = "10000"
-  val s2 = "200000"
-  val s3 = "3000000"
-  val s4 = "40000000"
-  val s5 = "500000000"
-  val s6 = "60000000"
-  val s7 = "7000000"
+*/
 
 }

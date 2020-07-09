@@ -21,10 +21,10 @@ class NewStringBenchmark extends BenchmarkBase {
     new String(NewStringBenchmarkData.chars)
   }
 
-  @Benchmark
+ /* @Benchmark
   def fastString: String = {
     FastStringFactory.fastNewString(NewStringBenchmarkData.chars)
-  }
+  }*/
 
   @Benchmark
   def sbToString: String = {
